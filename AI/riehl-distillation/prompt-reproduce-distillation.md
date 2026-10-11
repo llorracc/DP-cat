@@ -10,7 +10,33 @@ every change you made to the mathematics as stated. Work in a shell with git, no
 and the poppler tools (pdftotext, pdftoppm, pdfinfo); if any is missing, say so and do the
 nearest thing you can.
 
-## 0. Constraints that override everything else
+## How to read this prompt
+
+This prompt records one run of the job (Claude Fable 5.1, through Claude Code, 7 October 2026)
+so that a second run starts from the same inputs and knows what the first run decided. It is
+written to be run by that model at its maximum reasoning effort, and should also serve another
+model of comparable ability. It has three parts.
+
+- **Part I is fixed.** The constraints are Chris's and Akshay's, not the first run's, and the
+  inputs are pinned to exact versions. Do not change them.
+- **Part II is the first run's decisions:** how it read the sources; what it kept, cut and added;
+  how it reformulated; how it positioned the work; its slide plan; its format and file layout.
+  They are a considered starting point, made after reading everything in Part I, with the
+  reasoning where it is not obvious. **At each of them you should consider departing: ask
+  whether a different choice would serve the reader better, and make it if so.** The first run's
+  choice is the default only in the sense that it is what you fall back on when you find nothing
+  better; a run that only copies the first is worth less to Chris than one that improves on it.
+  Record every departure, and the main alternatives you considered and rejected, in a section of
+  the outline headed "Departures from the first run" (what you did, instead of what, and why), so
+  that he can compare the two runs.
+- **Part III is the bar the result must clear whatever you decide:** it builds, it is checked,
+  every reformulation is marked and proved, and the record is complete.
+
+---
+
+# Part I. Fixed
+
+## 1. Constraints from Chris and Akshay
 
 1. **Your output is scaffolding, not finished notes.** Chris is preparing the distillation with
    Akshay's agreement, and neither of them wants AI-drafted text to reach Riehl's group as if it
@@ -20,64 +46,60 @@ nearest thing you can.
    the original (https://akshayshanker.github.io/DP-cat/), and keep his result numbering so the
    deck can be read beside his slides. Where the deck claims novelty, claim it for the applied
    mathematics, not for the category theory, which is Akshay's own view of the work.
-3. **Every reformulation is marked.** Wherever you say something in a way Akshay's slides do not,
-   mark it in the deck source with an HTML comment beginning `CHECK:` that says what the slides
-   say instead, and prove it in a separate verification-notes file. Never present your
-   reformulation as his claim.
+3. **Every reformulation is marked and proved.** Wherever you say something in a way Akshay's
+   slides do not, mark it in the deck source (the first run used an HTML comment beginning
+   `CHECK:` that says what the slides say instead; any convention as visible and as easy to grep
+   will do) and prove it in a separate verification-notes file. Never present your reformulation
+   as his claim.
 4. **Git hygiene.** Never commit to Akshay's repository. Work in a fork under Chris's GitHub
    account (`llorracc`) or in a folder Chris names; do not commit or push unless Chris says to.
    Keep working files (outline, notes, builds) in a gitignored folder; Akshay's `.gitignore`
-   already ignores `AI/`, which is his convention for AI working material, so use
-   `AI/riehl-distillation/`.
-5. **Length.** At most 30 slides; aim for about 24.
+   already ignores `AI/`, which is his convention for AI working material.
+5. **Level, notation and length.** Chris's request: the deck should be "appropriate to her degree
+   of sophistication, her notation, and other conventions and approaches and style", and
+   "probably at most 20–30 slides". So: Riehl's notation and register throughout (section 3), and
+   at most 30 slides.
 
-## 1. Inputs
+## 2. Pinned inputs
 
-- **Source repo:** https://github.com/akshayshanker/DP-cat (public; the version this prompt was
-  written against is commit `ca94dff`, 25 Sep 2026). Three Marp decks at the repo root:
-  `Categorical types and AGI -1.md` (Session A, 67 slides), `-2.md` (Session B, 37 slides),
-  `-3.md` (Session C, 64 slides). Marp theme `theme/econ-ark-cat.css`, a callout engine in
+- **Source repo:** https://github.com/akshayshanker/DP-cat (public), at commit `ca94dff`
+  (2026-09-25 05:18 +1000). Three Marp decks at the repo root, with the first twelve hex digits
+  of each file's SHA-256 at that commit:
+  - `Categorical types and AGI -1.md` (Session A, 67 slides) `3ee03d671a64`
+  - `Categorical types and AGI -2.md` (Session B, 37 slides) `e6f8cb348592`
+  - `Categorical types and AGI -3.md` (Session C, 64 slides) `572ace0c152d`
+
+  Also at that commit: the Marp theme `theme/econ-ark-cat.css`; a callout engine in
   `marp.config.js` (Obsidian `> [!definition]` / `> [!claim]` / `> [!callout]` blockquotes become
-  styled boxes), about 70 SVG diagrams in `assets/`, and `tools/check-overflow.py`, a script that
-  renders a deck and reports slides whose body runs into the footnote. Sessions B and C rest on a
-  private note, `notes/Yoneda-stages/fields-and-stages.md`, which is gitignored and not available;
-  Session C cites its Propositions 8, 9 and 11 without proof.
-- **What the author regards as central:** the core idea is in the second deck, the free category
-  of the dynamic program; the central challenge, summarized at the end of the first deck, is how
-  to go from declarative first-order syntax (what economists write) to the higher-order
-  functional operator a computer solves; branching is not covered, and it is where he expects
-  initial diagrams to matter most.
+  styled boxes); about 70 SVG diagrams in `assets/`; and `tools/check-overflow.py`
+  (`1d9f260e14f4`), a script that renders a deck and reports slides whose body runs into the
+  footnote. Sessions B and C rest on a private note, `notes/Yoneda-stages/fields-and-stages.md`,
+  which is gitignored and not available; Session C cites its Propositions 8, 9 and 11 without
+  proof. If the repository has moved on, work from `ca94dff` and say what changed.
+- **What the author regards as central** (from his decks and his correspondence with Chris): the
+  core idea is in the second deck, the free category of the dynamic program; the central
+  challenge, summarized at the end of the first deck, is how to go from declarative first-order
+  syntax (what economists write) to the higher-order functional operator a computer solves;
+  branching is not covered, and it is where he expects initial diagrams to matter most.
 - **Riehl's text:** *Category Theory in Context*, **second edition**, free at
-  https://emilyriehl.github.io/files/context.pdf. Use this edition: Akshay's section numbers match
-  it (e.g. Example 4.1.13 is the free category on a quiver, Theorem 4.2.7 the unit/counit
-  characterizations) even though his slides cite "Riehl (2016), Dover".
+  https://emilyriehl.github.io/files/context.pdf. The file the first run used, downloaded
+  2026-10-07: 299 pages, 1,948,866 bytes, PDF creation date 2026-08-31, SHA-256
+  `e4779f34ff0432508f1105912f39a84af3c64799b969507325c80e27c2d994dd`. If the file at the URL
+  differs, say so and note any difference that bears on a citation. Use this edition: Akshay's
+  section numbers match it (e.g. Example 4.1.13 is the free category on a quiver, Theorem 4.2.7
+  the unit/counit characterizations) even though his slides cite "Riehl (2016), Dover".
+- **Tools the first run used:** Marp CLI 4.5.1 (`@marp-team/marp-cli`, PDF export needs an
+  installed Chrome); Python 3 with numpy and pillow for the overflow checker; poppler. Later
+  versions are fine; say which you used.
 - **Economics background,** in case you need it: the running example is the buffer-stock
   consumption–saving model (Carroll; Carroll and Shanker 2026), and the stage/factored-program
   material follows Sargent and Stachurski, *Dynamic Programming, Volume II: General States*
   (draft, 2026). Akshay's slides define everything you need.
 
-## 2. Step one: familiarize yourself with the source
+## 3. Facts about Riehl's text, verified by the first run against the pinned PDF
 
-Clone the repo. Read all three decks in full, not the headings. Record: the slide-level structure
-of each; which results carry numbers (Proposition 1, Lemma on the number of stagings, Propositions
-4, 5, 6, Theorem 7, Propositions 8, 10, 11); which examples recur (A: buffer stock; B: a
-deterministic chain with an unreached point; C: a two-decision chain; E: consumption–portfolio;
-F: the `buffer_stock.bl` stage file); which SVG assets illustrate what; and how the decks are
-built (`marp --no-stdin <deck> --theme-set theme/econ-ark-cat.css -o out.pdf --allow-local-files
---html`, run from the repo root so `marp.config.js` loads). Note what the decks do not cite: none
-of the categorical systems theory or open-games literature (section 6 below).
-
-## 3. Step two: familiarize yourself with Riehl, from her text, not from memory
-
-Download the second-edition PDF, run `pdftotext -layout`, and read: the "Notational conventions"
-and "Changes in this edition" sections of the preface; the Glossary of Notation; and every
-passage Akshay cites (Definition 1.1.1; Example 1.1.4; Definitions 1.2.1, 1.3.11, 1.3.13, 1.4.1,
-1.4.3, 1.5.7, 1.6.4, 1.6.14; Lemmas 1.6.5, 1.6.11, 1.7.4 and Remark 1.7.6; Examples 2.1.1 and
-2.4.11; Theorem 2.2.4; Corollary 2.2.8; Proposition 2.3.1; Definition 2.3.3; Definitions 2.4.1–2;
-Proposition 2.4.8; Example 3.6.11; Examples 4.1.13–14; Theorem 4.2.7; Example 5.1.5(iv);
-Definition 5.2.10 and Example 5.2.11(iv); the Lawvere-theory exercise in §5.5; the restriction
-functor $K^{*}$ in chapter 6). Build a notation table with three columns, Riehl / Akshay / what the
-deck will use. Facts you should confirm there (they are true of the second edition):
+Confirm these in the PDF rather than take them on trust; they are the basis of constraint 5. Where
+her text gives no symbol for something the deck needs, the choice is yours.
 
 - identities are `id_X` (the first edition had `1_X`); composites are juxtaposition `gf`,
   `g · f` only for typographical clarity; hom-sets `C(x, y)`; `Hom(F, G)` for natural
@@ -100,46 +122,84 @@ deck will use. Facts you should confirm there (they are true of the second editi
   extensions `Lan_K`, `Ran_K`; `≔` for definitions, `≅` for isomorphism, `≃` for equivalence,
   dashed arrows for the morphism whose existence is asserted; boldface for a term being defined.
 
-Also read enough of her prose to reproduce the register: definitions stated once and tersely;
-claims as Lemma/Proposition/Theorem with short diagram-chase proofs or "Exercise"; examples from
-across mathematics; the universal property is the motivation, so no motivation speeches; "the
-Yoneda lemma is arguably the most important result in category theory". Note from the preface
-that she used LLMs only for LaTeX bugs and accessibility and a Lean agent to verify an example, and
-that "All of the writing in the second edition remains my own": her stance on AI-written
-mathematics is the same as Akshay's. Check her current programme (synthetic ∞-category theory,
-homotopy type theory, formalization in Lean; ICM 2026 invited) only to calibrate the register;
-none of it goes into the deck.
+Her register, from the prose: definitions stated once and tersely; claims as
+Lemma/Proposition/Theorem with short diagram-chase proofs or "Exercise"; examples from across
+mathematics; the universal property is the motivation, so no motivation speeches; "the Yoneda
+lemma is arguably the most important result in category theory". The preface says she used LLMs
+only for LaTeX bugs and accessibility and a Lean agent to verify an example, and that "All of the
+writing in the second edition remains my own": her stance on AI-written mathematics is the same
+as Akshay's. Her current programme (synthetic ∞-category theory, homotopy type theory,
+formalization in Lean; ICM 2026 invited) calibrates the register; none of it goes into the deck.
 
-## 4. Step three: decide what to keep, cut and add
+---
 
-**Keep (Akshay's mathematics, in his numbering):** signature, declaration, the policy quiver
-$Q_\Sigma$, models as functors out of $FQ_\Sigma$ (Proposition 1), the forward model into Markov
-kernels and the backward model (a presheaf of value functions), the pairing
-$\langle\mu K,v\rangle=\langle\mu,K^{*}v\rangle$ and its (di)naturality, chains, groupings, stages,
-stagings and the counting lemma, the stage form $T_\sigma=U\cdot D_b(e,\sigma)\cdot F$,
-Sargent–Stachurski's factored programs as naturality squares (Proposition 5), moving a boundary
-(Proposition 4), partial transformations (Proposition 6), the coarsest cut (Theorem 7) and the
-canonical stage form (Proposition 8), the backward-to-forward discussion (kernel characterization),
-policies as sections (Proposition 10), rules and the stage form (Proposition 11), the slide on what
-the Yoneda lemma does and does not do, and the open problems (several inputs, branching, dimension,
-choice of staging). Use one running example, A (buffer stock); mention C only for the count of
-stagings and E only for a non-deterministic decision edge.
+# Part II. The first run's decisions
+
+Defaults, not orders. At each one, consider whether to depart; depart where you judge a different
+choice better, and record it in the outline.
+
+## 4. How the first run familiarized itself
+
+Clone the repo and read all three decks in full, not the headings. The first run recorded: the
+slide-level structure of each; which results carry numbers (Proposition 1, the lemma on the
+number of stagings, Propositions 4, 5, 6, Theorem 7, Propositions 8, 10, 11); which examples
+recur (A: buffer stock; B: a deterministic chain with an unreached point; C: a two-decision chain;
+E: consumption–portfolio; F: the `buffer_stock.bl` stage file); which SVG assets illustrate what;
+and how the decks are built (`marp --no-stdin <deck> --theme-set theme/econ-ark-cat.css -o
+out.pdf --allow-local-files --html`, run from the repo root so `marp.config.js` loads). It also
+noted what the decks do not cite: none of the categorical systems theory or open-games literature
+of section 7.
+
+For Riehl, it downloaded the pinned PDF, ran `pdftotext -layout`, and read the "Notational
+conventions" and "Changes in this edition" sections of the preface, the Glossary of Notation, and
+every passage Akshay cites (Definition 1.1.1; Example 1.1.4; Definitions 1.2.1, 1.3.11, 1.3.13,
+1.4.1, 1.4.3, 1.5.7, 1.6.4, 1.6.14; Lemmas 1.6.5, 1.6.11, 1.7.4 and Remark 1.7.6; Examples 2.1.1
+and 2.4.11; Theorem 2.2.4; Corollary 2.2.8; Proposition 2.3.1; Definition 2.3.3; Definitions
+2.4.1–2; Proposition 2.4.8; Example 3.6.11; Examples 4.1.13–14; Theorem 4.2.7; Example 5.1.5(iv);
+Definition 5.2.10 and Example 5.2.11(iv); the Lawvere-theory exercise in §5.5; the restriction
+functor $K^{*}$ in chapter 6). From this it built a notation table with three columns, Riehl /
+Akshay / what the deck will use. Organize this as you like; Part III requires only that the decks
+be read in full and every cited number be verified against the PDF.
+
+## 5. What the first run kept, cut and added
+
+**Kept, in Akshay's numbering,** because the deck is meant to be read beside his slides:
+signature, declaration, the policy quiver $Q_\Sigma$, models as functors out of $FQ_\Sigma$
+(Proposition 1), the forward model into Markov kernels and the backward model (a presheaf of
+value functions), the pairing $\langle\mu K,v\rangle=\langle\mu,K^{*}v\rangle$ and its
+(di)naturality, chains, groupings, stages, stagings and the counting lemma, the stage form
+$T_\sigma=U\cdot D_b(e,\sigma)\cdot F$, Sargent–Stachurski's factored programs as naturality
+squares (Proposition 5), moving a boundary (Proposition 4), partial transformations
+(Proposition 6), the coarsest cut (Theorem 7) and the canonical stage form (Proposition 8), the
+backward-to-forward discussion (kernel characterization), policies as sections (Proposition 10),
+rules and the stage form (Proposition 11), the slide on what the Yoneda lemma does and does not
+do, and the open problems (several inputs, branching, dimension, choice of staging). One running
+example, A (buffer stock); C mentioned only for the count of stagings and E only for a
+non-deterministic decision edge.
 
 **Cut, because she wrote it or it is not for her:** Session A §§2.1–2.3 (her chapter 1); §2.4,
 the universal property of $(\mathbb N,s,0)$, which is her Example 2.1.1 / 2.4.11 (one-line
 callback); the Pāṇini/Backus/Python-AST slides; the AGI and Mahadevan framing; "speaking
 deterministically to AI"; the economic functor examples (chain rule, iterated expectations,
-discounting); the proofs of Proposition 1 and Theorem 7 (one line each at her level); the stage-file
-and application examples.
+discounting); the proofs of Proposition 1 and Theorem 7 (one line each at her level); the
+stage-file and application examples.
 
-**Add:** a slide positioning the work in the literature a category theorist will think of
-(section 6), a slide of honest open problems, a slide of questions for her, and the economics
-defined once on one slide, since she may not know it.
+**Added, because her first questions will be "where does this sit" and "what is open":** a slide
+positioning the work in the literature a category theorist will think of (section 7), a slide of
+honest open problems, a slide of questions for her, and the economics defined once on one slide,
+since she may not know it.
 
-## 5. Step four: reformulate at her level, and prove each reformulation
+Consider weighing these differently: for instance keep some of Session A if you think she would
+want to see how her Example 2.1.1 is used, drop the questions slide, or change the running
+example.
 
-Make these reformulations; mark each with a `CHECK:` comment in the deck and prove it in
-`verification-notes.md` (a few lines each; all are standard):
+## 6. Reformulations the first run made
+
+Each was marked in the deck and proved in the verification notes. They are candidates, not a list
+to reproduce: for each, consider whether it is right, whether a different formulation would be
+more natural to her, and whether Akshay's own statement would serve better; then use, replace or
+drop it accordingly. Whatever you choose, constraint 3 applies to every departure from his
+wording.
 
 1. $Q_\Sigma$ is the pullback $Q\times_{\mathcal S}\mathcal S_\Sigma$ in $\mathsf{Quiver}$ of the
    typing $\tau\colon Q\to\mathcal S$ along the projection $\mathcal S_\Sigma\to\mathcal S$ that
@@ -170,15 +230,19 @@ Make these reformulations; mark each with a `CHECK:` comment in the deck and pro
    $\mathsf{Set}^{\mathsf C^{\mathrm{op}}\times\mathsf C}$ to be locally small, so $\mathsf C=\mathsf{Set}$
    is admitted. Proposition 10 is Corollary 2.2.8 with $c=E$, $c'=S$.
 
-Also fix two places where a hasty distillation goes wrong: the forward model sends **every** edge
-to a kernel; only in Example A is the decision edge the deterministic kernel $\delta_\sigma$ (in
-Example E the portfolio decision integrates the returns). And the backward model's affine form
+**Two corrections of fact,** which the first run found a hasty distillation gets wrong. These are
+not matters of taste: verify them, and if they hold, keep them. The forward model sends **every**
+edge to a kernel; only in Example A is the decision edge the deterministic kernel $\delta_\sigma$
+(in Example E the portfolio decision integrates the returns). And the backward model's affine form
 $v\mapsto r+\beta K^{*}v$ is the decks' *time-separable* case; say so.
 
-## 6. Step five: position the work against the literature she will think of
+## 7. How the first run positioned the work
 
-Search for, and verify by reading at least the abstracts of, the works below; cite them on one
-slide and in the references. Say plainly that Akshay's decks cite none of them.
+It added one slide placing the work in the literature a category theorist will think of, cited
+the works below there and in the references, and said plainly that Akshay's decks cite none of
+them. The list is what it found and verified (at least the abstracts). Which of them to cite,
+what to add, and how to state the relation are decisions to make afresh: consider whether each
+belongs, what the first run missed, and whether its one-sentence relations below are right.
 
 - Lawvere's functorial semantics (models as functors) and Jacobs's classifying categories
   (*Categorical Logic and Type Theory*, 1999), which Akshay does cite.
@@ -198,32 +262,15 @@ slide and in the references. Say plainly that Akshay's decks cite none of them.
   reinforcement learning* (JMLR 2025).
 - Mahadevan, *Universal decisions with Kan extensions*, which Akshay cites.
 
-State the relation in one sentence each: the systems-theory frameworks compose systems along
-interfaces, whereas here the composite is fixed by the declaration and the question is which
-functors out of it, and which transformations between them, carry the economics; the optics work
-makes Bellman updates parametrised optics with a representable functor doing the work.
+The relations the first run stated, one sentence each: the systems-theory frameworks compose
+systems along interfaces, whereas here the composite is fixed by the declaration and the question
+is which functors out of it, and which transformations between them, carry the economics; the
+optics work makes Bellman updates parametrised optics with a representable functor doing the work.
 
-## 7. Step six: write the deck
+## 8. The slide plan the first run used (24 slides)
 
-**Format.** Marp markdown at the repo root of the fork, named
-`free-category-of-a-dynamic-program.md`, with front matter `marp: true`, `theme: econ-ark-cat`,
-`paginate: true`, `math: katex`, reusing Akshay's theme, callout engine and SVG assets
-(`assets/fs-period-chain.svg`, `fs-triangle.svg`, `fs-three-rows.svg`, `fs-stage-sandwich.svg`,
-`fs-canonical.svg`, and the staging diagrams). Slide anatomy as in his decks: a `kicker` line,
-an `##` heading, boxed definitions and claims via the callout syntax, a `footnote` div for
-citations. Start the file with an HTML comment giving provenance, the `CHECK` convention and the
-build command; do not nest `<!-- … -->` inside that comment, which closes it early and prints the
-rest on the title slide.
-
-**Style rules.** Her notation throughout (section 3). Everything in CTiC chapters 1–6 assumed:
-never define category, functor, natural transformation, representable, Yoneda. Define each new
-term once, in boldface, and never again. State results as Proposition/Theorem with her citation
-form "Riehl, Example 4.1.13". Proofs are one line or omitted. No motivation paragraphs; the
-universal property is the motivation. Cite the second edition by number. At most about nine lines
-of body text per slide at the theme's default size; wrap denser slides in `<div class="small">`.
-Keep Akshay's result numbers.
-
-**Slide plan (24 slides; adjust within 20–30).**
+A plan, not a template: consider, slide by slide, whether to reorder, merge, split or replace it,
+within the 30-slide limit.
 
 1. Title: *The free category of a dynamic program. Dynamic programming as functors out of a free
    category.* Mathematics: Akshay Shanker (DP-cat, 2026); distilled by C. Carroll. Link.
@@ -262,7 +309,7 @@ Keep Akshay's result numbers.
 18. Rules; Proposition 11 with the Yoneda argument and the size remark; the stage form is the form
     of every rule.
 19. What the lemma does and does not do here.
-20. Where this sits (section 6), ending with Akshay's own assessment.
+20. Where this sits (section 7), ending with Akshay's own assessment.
 21. Not yet done: several inputs (products; $\mathsf{Stoch}$ has no categorical products), branching,
     dimension, choice of staging (define "rotation" where used).
 22. Questions for a category theorist: sketch or finite-product theory from the start?; a clean
@@ -272,10 +319,50 @@ Keep Akshay's result numbers.
     which categories of value functions the image factorization still gives the reduction?;
     branching via tree-shaped quivers, colimits or polynomial functors?; is $\int D_b$ useful?
 23–24. References (Riehl 2nd ed.; Fritz; Sargent–Stachurski; Goguen–Thatcher–Wagner–Wright 1977;
-    Jacobs; Backus 1978; Lawvere 1963; the section-6 works; Shanker's decks and private notes;
+    Jacobs; Backus 1978; Lawvere 1963; the section-7 works; Shanker's decks and private notes;
     Carroll–Shanker 2026).
 
-## 8. Step seven: build, check, look, fix
+## 9. Format and style the first run chose
+
+**Format.** Marp markdown at the repo root of the fork, named
+`free-category-of-a-dynamic-program.md`, with front matter `marp: true`, `theme: econ-ark-cat`,
+`paginate: true`, `math: katex`, reusing Akshay's theme, callout engine and SVG assets
+(`assets/fs-period-chain.svg`, `fs-triangle.svg`, `fs-three-rows.svg`, `fs-stage-sandwich.svg`,
+`fs-canonical.svg`, and the staging diagrams), so that the deck looks like a continuation of his.
+Slide anatomy as in his decks: a `kicker` line, an `##` heading, boxed definitions and claims via
+the callout syntax, a `footnote` div for citations. The file starts with an HTML comment giving
+provenance, the marking convention and the build command. (A hazard, not a choice: do not nest
+`<!-- … -->` inside that comment, which closes it early and prints the rest on the title slide.)
+Consider whether another format, such as Beamer, would serve her better; what Marp buys is that
+the deck sits beside Akshay's in his repository and builds with his tools.
+
+**Style.** Everything in CTiC chapters 1–6 assumed: never define category, functor, natural
+transformation, representable, Yoneda. Define each new term once, in boldface, and never again.
+State results as Proposition/Theorem with her citation form "Riehl, Example 4.1.13". Proofs are
+one line or omitted. No motivation paragraphs; the universal property is the motivation. At most
+about nine lines of body text per slide at the theme's default size; wrap denser slides in
+`<div class="small">`. Keep Akshay's result numbers (constraint 2).
+
+## 10. Deliverables and file layout the first run used
+
+In `AI/riehl-distillation/` of the fork clone (gitignored, per constraint 4):
+
+- `outline.md`: the notation table, the keep/cut/add decisions, the slide plan, the
+  "Departures from the first run" section, and a status line (ACTIVE / EXECUTED, with date and
+  what remains).
+- `verification-notes.md`: a proof of each marked reformulation, a list of what was checked
+  against the decks without reformulation, and a list of what still needs a human (the
+  positioning slide and the questions slide are the AI's, not Akshay's).
+- `build/`: `deck.pdf`, `deck.html`.
+
+At the repo root, untracked until Chris says otherwise: `free-category-of-a-dynamic-program.md`.
+Names and layout are yours; the content of the record is required by Part III.
+
+---
+
+# Part III. The bar, whatever you decide
+
+## 11. Build, check, look, fix
 
 Install Marp (`npm install -g @marp-team/marp-cli`; PDF export needs an installed Chrome). From
 the repo root run
@@ -294,37 +381,41 @@ third of them, including the title slide, a definition slide, a two-column slide
 slide and the references: check that callout boxes rendered, that KaTeX symbols such as `≔`,
 `↣`, `⇝`, `よ` rendered (keep よ out of math mode), that diagrams are legible (a wide SVG in a
 narrow column is not), and that nothing printed that should be a comment. Fix and rebuild until
-clean.
+clean. If you chose another format, apply the same bar with that format's tools: it builds, no
+slide overflows, and you have looked at the pages.
 
-## 9. Step eight: deliverables and record
+## 12. The record and the report
 
-In `AI/riehl-distillation/` of the fork clone (gitignored):
-
-- `outline.md`: the notation table, the keep/cut/add decisions, the slide plan, and a status line
-  (ACTIVE / EXECUTED, with date and what remains).
-- `verification-notes.md`: a proof of each `CHECK` item, a list of what was checked against the
-  decks without reformulation, and a list of what still needs a human (the positioning slide and
-  the questions slide are yours, not Akshay's).
-- `build/`: `deck.pdf`, `deck.html`.
-
-At the repo root, untracked until Chris says otherwise: `free-category-of-a-dynamic-program.md`.
+Leave the record described in section 10 (under whatever names you chose): the outline with its
+status line and its "Departures from the first run" section, which must exist even if it says
+that every first-run decision was considered and kept; the verification notes with a proof of
+every marked reformulation; the builds.
 
 Finish with a short report to Chris: what you produced and where; the facts about Riehl that bear
-on the deck (second edition, notation changes, her AI stance); the list of `CHECK` items; what you
-cut; and the three decisions only he can make: how the draft becomes his own text (your
-recommendation: he rewrites from your scaffolding, credits Akshay, and tells Akshay an AI drafted
-the skeleton), whether to commit to the fork, and when Akshay sees the draft. Do not send
-anything to anyone.
+on the deck (second edition, notation changes, her AI stance); the list of marked reformulations;
+what you cut; where and why you departed from the first run; and the three decisions only he can
+make: how the draft becomes his own text (the first run's recommendation: he rewrites from the
+scaffolding, credits Akshay, and tells Akshay an AI drafted the skeleton), whether to commit to
+the fork, and when Akshay sees the draft. Do not send anything to anyone.
 
-## 10. Acceptance checks
+## 13. Acceptance checks
+
+These hold regardless of your decisions:
 
 - ≤ 30 slides; builds; 0 overflows; every rendered page inspected or spot-checked as above.
-- No definition of a concept in CTiC chapters 1–6; every new term defined exactly once.
-- Riehl's notation throughout; `Prob` not `Δ`; `id` not `1`; `quiver` not `graph`; citations to
-  the second edition by number, and each cited number verified against the PDF.
-- Every `CHECK` item has a proof in the notes; the forward-model and time-separable corrections
-  of section 5 are in place.
-- The positioning slide cites the works of section 6 and says the decks do not.
+- Riehl's notation throughout: `Prob` not `Δ`; `id` not `1`; `quiver` not `graph`; citations to
+  the second edition by number, and each cited number verified against the pinned PDF.
+- Every reformulation of Akshay's wording is marked in the deck source and proved in the notes.
 - Title slide credits Akshay and links the original; every file states that it is scaffolding
   to be vetted by Chris and Akshay before it goes anywhere.
+- The outline's "Departures from the first run" section records the departures and the main
+  alternatives considered, and the report to Chris summarizes it.
 - Nothing committed to Akshay's repo; nothing pushed; nothing sent.
+
+These hold if you kept the corresponding first-run decision, and are otherwise replaced by the
+check your own decision implies:
+
+- No definition of a concept in CTiC chapters 1–6; every new term defined exactly once.
+- The two corrections of fact in section 6 are in place, if your verification confirmed them.
+- The positioning slide cites the works of section 7 that you kept, and says that the decks do
+  not cite them.
